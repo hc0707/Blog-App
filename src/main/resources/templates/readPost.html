@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Home</title>
+    <style>
+        .flex-container {
+            margin: 50px;
+            display: flex;
+            align-items:center;
+            flex-direction:column;
+        }
+
+        label{
+            display:block;
+        }
+        textarea{
+            width:70%;
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+<h1 style="text-align: justify;">Blog Post App</h1>
+<div class="flex-container">
+    <h2><span th:text="${post.title}"/></h2>
+    <h4><span th:text="${post.author}+', '+${#temporals.format(post.publishedAt, 'dd/MMM/yyy HH:mm')}"/></h4>
+    <p><span th:text="${post.content}"/></p>
+    <p style="color: gray;"><em>tag1, tag2, tag3</em></p>
+</div>
+<hr>
+<br>
+<h3>Add New Comment</h3>
+<div style="border:1px solid black;width:50%;padding:10px">
+    <form method="POST" th:attr="action=@{/comment/save(pid=${post.id})}">
+        <div>
+            <label>Name</label>
+            <input type="text" name="name" required>
+        </div>
+        <br>
+        <div>
+            <label>Email</label>
+            <input type="email" name="email" required>
+        </div>
+        <br>
+        <div>
+            <label>Comment</label>
+            <textarea placeholder="Write your comment here"
+                      style="height: 50px;resize: vertical;" name="comment"></textarea>
+        </div>
+        <br>
+        <div>
+            <button type="submit">SavE</button>
+        </div>
+    </form>
+</div>
+<h3>Comments</h3>
+<div th:each="comment:${post.comments}" style="border:0.1px dotted gray;padding:5px;margin:10px">
+    <h4><em><span th:text="${comment.name}+'['+${comment.email}+'] commented on'+${#temporals.format(comment.createdAt, 'dd/MMM/yyy HH:mm')}" />
+    </em></h4>
+    <p><span th:text="${comment.comment}"/></p>
+    <a th:href="@{/comment/edit(id=${comment.id})}">Update</a>
+    <a th:href="@{/comment/delete(id=${comment.id},postId=${post.id})}">Delete</a>
+</div>
+</body>
+</html>
+

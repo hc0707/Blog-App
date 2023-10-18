@@ -56,6 +56,7 @@ public class PostController {
         model.addAttribute("message","Post saved to draft");
         return "postForm";
     }
+
     @GetMapping("/post/update/{id}")
     public String updatePost(@PathVariable Long id,Model model){
         Optional<Post> post = postRepository.findById(id);
@@ -71,5 +72,17 @@ public class PostController {
         if (id!=null)
             postRepository.deleteById(id);
         return "redirect:/";
+    }
+
+    @GetMapping("/post/read/{id}")
+    public String readPost(@PathVariable Long id,Model model){
+        Optional<Post> post = postRepository.findById(id);
+        if (post.isPresent()) {
+            model.addAttribute("post", post.get());
+            return "readPost";
+        }
+        else
+            return "postForm";
+
     }
 }
