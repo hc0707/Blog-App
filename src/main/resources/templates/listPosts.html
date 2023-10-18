@@ -44,9 +44,9 @@
 <div class="flex-container">
     <tr th:each="post: ${posts}">
         <div class="card">
-            <a href="#"><span class="link"></span></a>
+            <a th:attr="href='/post/read/'+${post.id}"><span class="link"></span></a>
             <h2><span th:text="${post.title}"/></h2>
-            <h4>Author, <span th:text="${#temporals.format(post.publishedAt, 'dd/MMM/yyy HH:mm')}"/></h4>
+            <h4><span th:text="${post.author}+', '+${#temporals.format(post.publishedAt, 'dd/MMM/yyy HH:mm')}"/></h4>
             <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis perferendis labore expedita pariatur
                 voluptate, cumque unde quae facilis maiores similique, fuga quas dolore repellendus, necessitatibus
                 sapiente dicta! Error, facere tempora?</p>

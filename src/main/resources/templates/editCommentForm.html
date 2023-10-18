@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Create or Edit Blog</title>
+    <style>
+        .container{
+            margin: 50px;
+            display: flex;
+            align-items: center;
+            flex-direction:column;
+        }
+
+        textarea{
+            width:800px;
+            resize: none;
+        }
+    </style>
+</head>
+
+<body>
+<h1 style="text-align: justify;">Blog Post App</h1>
+    <div class="container">
+    <h3>Update Comment</h3>
+        <form method="POST" th:attr="action=@{/comment/update(postId=${comment.post.id})}">
+            <input type="hidden" th:value="${comment}!=null?${comment.id}" name="id">
+
+            <br>
+            <div>
+                <textarea placeholder="Write your content here"
+                          th:text="${comment}!=null?${comment.comment}" style="height: 250px;resize: vertical;" name="comment"></textarea>
+            </div>
+            <br>
+            <div>
+                <button type="submit">Update</button>
+            </div>
+
+        </form>
+    </div>
+</body>
+
+</html>
