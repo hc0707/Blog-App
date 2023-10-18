@@ -16,14 +16,17 @@ public class Comment {
     @Column(name = "comment",columnDefinition = "text")
     private String comment;
 
-    @Column(name = "post_id")
-    private Long postId;
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+
 
     public Long getId() {
         return id;
@@ -57,14 +60,6 @@ public class Comment {
         this.comment = comment;
     }
 
-    public Long getPostId() {
-        return postId;
-    }
-
-    public void setPostId(Long postId) {
-        this.postId = postId;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -81,6 +76,14 @@ public class Comment {
         this.updatedAt = updatedAt;
     }
 
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
     @Override
     public String toString() {
         return "Comment{" +
@@ -88,7 +91,6 @@ public class Comment {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", comment='" + comment + '\'' +
-                ", postId=" + postId +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
