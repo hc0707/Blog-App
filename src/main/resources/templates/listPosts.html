@@ -1,48 +1,69 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>Home</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <style>
+        .flex-container {
+            margin: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items:center;
+            flex-wrap:wrap;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 43%;
+            padding: 10px;
+            margin: 10px;
+            display: inline;
+            position: relative;
+        }
+
+        .link {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        a{
+            color: black;
+            text-decoration: none;
+            font-weight:bold;
+            font-size: 1.2rem;
+            margin: auto 10px;
+        }
+    </style>
 </head>
 <body>
-    <div class="d-flex flex-column align-items-center">
-        <tr th:each="post: ${posts}">
-            <div class="card text-center w-50 m-5">
-                <div class="card-header">
-                    <label type="text" th:text="'Published on: ' +${#temporals.day(post.publishedAt)}+' '
-                     +${#temporals.monthName(post.publishedAt)}+' '
-                     +${#temporals.year(post.publishedAt)}+' '
-                     +${#temporals.format(post.publishedAt, 'HH:mm')}" />
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title"><span  th:text="${post.title}"/></h5>
-                    <p class="card-text"><span  th:text="${post.excerpt}"/></p>
-                    <p class="card-text"><span  th:text="${post.author}"/></p>
-                    <a href="#" class="btn btn-primary">Read Blog</a>
-                </div>
-                <div class="card-footer text-body-secondary">
-                tag1, tag2, tag3
-                </div>
-            </div>
-        </tr>
-      </div>
-    <nav th:if="${pageCount} != null" aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-            <li th:class="${pageNumber}==1?'page-item disabled':'page-item'">
-                <a class="page-link" th:href="@{~/(start=${pageNumber}-1,limit=${pageSize})}">Previous</a>
-            </li>
+<h1 style="text-align: justify;">Blog Post App</h1>
+<div class="flex-container">
+    <tr th:each="post: ${posts}">
+        <div class="card">
+            <a href="#"><span class="link"></span></a>
+            <h2><span th:text="${post.title}"/></h2>
+            <h4>Author, <span th:text="${#temporals.format(post.publishedAt, 'dd/MMM/yyy HH:mm')}"/></h4>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis perferendis labore expedita pariatur
+                voluptate, cumque unde quae facilis maiores similique, fuga quas dolore repellendus, necessitatibus
+                sapiente dicta! Error, facere tempora?</p>
+            <p style="color: gray;"><em>tag1, tag2, tag3</em></p>
+        </div>
+    </tr>
+</div>
+
+<nav th:if="${pageCount} != null" aria-label="Page navigation example" style="text-align: center;border:1px solid gray;padding:10px">
+            <a th:href="@{~/(start=${pageNumber}-1,limit=${pageSize})}" th:style="${pageNumber}==1?'pointer-events: none;'">Previous</a>
 
             <tr th:each="i :${#numbers.sequence( 1, pageCount, 1)}">
-                <li th:class="${pageNumber==i}?'page-item active':'page-item'">
-                    <a class="page-link" th:href="@{~/(start=${i},limit=${pageSize})}" ><span th:text="${i}" /></a>
-                </li>
+                    <a  th:href="@{~/(start=${i},limit=${pageSize})}" th:style="${pageNumber!=i}?'color: gray;font-size: 1rem;'"><span th:text="${i}"/></span></a>
             </tr>
 
-            <li th:class="${pageNumber}==${pageCount}?'page-item disabled':'page-item'">
-                <a class="page-link" th:href="@{~/(start=${pageNumber}+1,limit=${pageSize})}">Next</a>
-            </li>
-        </ul>
-    </nav>
+            <a th:href="@{~/(start=${pageNumber}+1,limit=${pageSize})}" th:style="${pageNumber}==${pageCount}?'pointer-events: none;'">Next</a>
+</nav>
 </body>
 </html>
+
