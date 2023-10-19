@@ -40,7 +40,9 @@
     </style>
 </head>
 <body>
-<h1 style="text-align: justify;">Blog Post App</h1>
+<h1 style="text-align: justify;">
+    <a href="/" style="text-decoration:none;color:black;font-size:2rem;">Blog Post App</a>
+</h1>
 <div class="flex-container">
     <tr th:each="post: ${posts}">
         <div class="card">
@@ -50,7 +52,7 @@
             <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis perferendis labore expedita pariatur
                 voluptate, cumque unde quae facilis maiores similique, fuga quas dolore repellendus, necessitatibus
                 sapiente dicta! Error, facere tempora?</p>
-            <p style="color: gray;"><em>tag1, tag2, tag3</em></p>
+            <p th:each="tag:${post.tags}" style="color: gray;"><em><span th:text="${tag.name}"/></em></p>
         </div>
     </tr>
 </div>

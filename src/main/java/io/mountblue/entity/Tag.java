@@ -3,6 +3,7 @@ package io.mountblue.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "tags")
@@ -19,6 +20,9 @@ public class Tag {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToMany(mappedBy = "tags",cascade = {CascadeType.DETACH,CascadeType.REFRESH})
+    private List<Post> posts;
 
     public Long getId() {
         return id;
@@ -50,6 +54,14 @@ public class Tag {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
     @Override

@@ -40,18 +40,17 @@ public class PostController {
     }
 
     @PostMapping("/post/publish")
-    public String publishPost(@ModelAttribute Post post, Model model){
+    public String publishPost(@ModelAttribute Post post, @RequestParam String tagString){
         post.setPublished(true);
         post.setPublishedAt(LocalDateTime.now());
-        postService.savePost(post);
+        postService.savePost(post,tagString);
         return "redirect:/";
     }
 
     @PostMapping("/post/draft")
-    public String draftPost(@ModelAttribute Post post,Model model){
-        System.out.println(post.getId());
+    public String draftPost(@ModelAttribute Post post,@RequestParam String tagString,Model model){
         post.setPublished(false);
-        Post savedPost = postService.savePost(post);
+        Post savedPost = postService.savePost(post, tagString);
         model.addAttribute("post",savedPost);
         model.addAttribute("message","Post saved to draft");
         return "postForm";
@@ -60,8 +59,9 @@ public class PostController {
     @GetMapping("/post/update/{id}")
     public String updatePost(@PathVariable Long id,Model model){
         Optional<Post> post = postRepository.findById(id);
-        if (post.isPresent())
+        if (post.isPresent()) {
             model.addAttribute("post", post.get());
+        }
         else
             model.addAttribute("message","Id "+id+" does not exist");
         return "postForm";

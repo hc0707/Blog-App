@@ -1,7 +1,9 @@
 package io.mountblue.service;
 
+import io.mountblue.entity.Tag;
 import io.mountblue.repository.PostRepository;
 import io.mountblue.entity.Post;
+import io.mountblue.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +19,9 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private TagService tagService;
+
     public Page<Post> displayPosts(Integer pageNumber,Integer pageSize){
         PageRequest page = PageRequest.of(pageNumber-1,pageSize, Sort.Direction.DESC,"publishedAt");
         Page<Post> posts = postRepository.findByIsPublishedTrue(page);
@@ -31,10 +36,13 @@ public class PostService {
         return pageCount;
     }
 
-    public Post savePost(Post post){
+    public Post savePost(Post post, String tagString){
+        List<Tag> postTags = tagService.getPostTags(tagString);
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
+        post.setTags(postTags);
         Post savedPost = postRepository.save(post);
         return savedPost;
     }
+
 }

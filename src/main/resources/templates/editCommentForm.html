@@ -19,7 +19,9 @@
 </head>
 
 <body>
-<h1 style="text-align: justify;">Blog Post App</h1>
+<h1 style="text-align: justify;">
+    <a href="/" style="text-decoration:none;color:black">Blog Post App</a>
+</h1>
     <div class="container">
     <h3>Update Comment</h3>
         <form method="POST" th:attr="action=@{/comment/update(postId=${comment.post.id})}">

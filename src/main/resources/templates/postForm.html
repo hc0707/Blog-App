@@ -20,7 +20,9 @@
 </head>
 
 <body>
-<h1 style="text-align: justify;">Blog Post App</h1>
+<h1 style="text-align: justify;">
+    <a href="/" style="text-decoration:none;color:black">Blog Post App</a>
+</h1>
     <h3><span th:text="${message}"/></h3>
     <div class="container">
         <form>
@@ -38,16 +40,18 @@
                           name="author"></textarea>
             </div>
             <br>
+            <div th:if="${post}==null" class="mb-3">
+                <label>Tags</label>
+                <textarea  class="form-control postField" placeholder="Enter tags seperated by ',' "
+                          style="resize:none;" name="tagString"></textarea>
+            </div>
+            <br>
             <div>
                 <label>Content</label>
                 <textarea placeholder="Write your content here"
                           th:text="${post}!=null?${post.content}:null" style="height: 250px;resize: vertical;" name="content"></textarea>
             </div>
             <br>
-            <!--				<div class="mb-3">-->
-            <!--					<textarea class="form-control postField" placeholder="Enter tags seperated by ',' "-->
-            <!--							  style="height: 70px;resize:none;" name="tags"></textarea>-->
-            <!--				</div>-->
             <div>
                 <button type="submit" formaction="/post/publish"
                         formmethod="post">Publish
