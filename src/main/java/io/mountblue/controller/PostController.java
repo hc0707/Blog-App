@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -21,16 +22,15 @@ public class PostController {
     private PostRepository postRepository;
 
     @GetMapping
-    public String displayPosts(Model model, @RequestParam(value = "start", required = false) Integer pageNumber, @RequestParam(value = "limit", required = false) Integer pageSize) {
-        if(pageNumber==null)
-            pageNumber=1;
-        if (pageSize==null)
-            pageSize=5;
-        Page<Post> posts = postService.displayPosts(pageNumber, pageSize);
+    public String displayPosts(Model model, @RequestParam Map<String,String> queryString) {
+        int pageNumber = Integer.parseInt(queryString.getOrDefault("start", "1"));
+        int pageSize = Integer.parseInt(queryString.getOrDefault("limit", "6"));
+        Page<Post> posts = postService.displayPosts(queryString,pageNumber,pageSize);
+        System.out.println(posts.getTotalPages()+" "+posts.getTotalElements()+" "+posts.getNumberOfElements());
         model.addAttribute("posts", posts);
         model.addAttribute("pageNumber",pageNumber);
         model.addAttribute("pageSize",pageSize);
-        model.addAttribute("pageCount",postService.getPageCount(pageSize));
+        model.addAttribute("pageCount",posts.getTotalPages());
         return "listPosts";
     }
 

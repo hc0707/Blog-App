@@ -37,12 +37,42 @@
             font-size: 1.2rem;
             margin: auto 10px;
         }
+        label{
+            margin-left:10px;
+        }
     </style>
 </head>
 <body>
 <h1 style="text-align: justify;">
     <a href="/" style="text-decoration:none;color:black;font-size:2rem;">Blog Post App</a>
 </h1>
+<button><a href="/post">Create Blog Post</a></button>
+<div style="display:flex;justify-content:end;">
+<form style="margin-right:20px" method="get" action="/">
+    <label for="search">Search:</label>
+    <input type="text" id="search" name="search" placeholder="Enter search term" style="width:300px">
+    <label for="sortBy">Sort By:</label>
+    <select id="sortBy" name="sortField">
+        <option value="publishedAt">Published Date</option>
+        <option value="author">Author</option>
+        <option value="title">Title</option>
+    </select>
+    <label for="sortBy">Order By:</label>
+    <select name="order">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+    </select>
+    <label for="sortBy">Page Size</label>
+    <select name="limit">
+        <option value="2">2</option>
+        <option value="4">4</option>
+        <option value="6">6</option>
+        <option value="8">8</option>
+        <option value="10">10</option>
+    </select>
+    <button type="submit">Search</button>
+</form>
+</div>
 <div class="flex-container">
     <tr th:each="post: ${posts}">
         <div class="card">
@@ -57,8 +87,8 @@
     </tr>
 </div>
 
-<nav th:if="${pageCount} != null" aria-label="Page navigation example" style="text-align: center;border:1px solid gray;padding:10px">
-            <a th:href="@{~/(start=${pageNumber}-1,limit=${pageSize})}" th:style="${pageNumber}==1?'pointer-events: none;'">Previous</a>
+<nav th:if="${pageCount} != 1" aria-label="Page navigation example" style="text-align: center;border:1px solid gray;padding:10px">
+            <a  th:href="@{~/(start=${pageNumber}-1,limit=${pageSize})}" th:style="${pageNumber}==1?'pointer-events: none;'">Previous</a>
 
             <tr th:each="i :${#numbers.sequence( 1, pageCount, 1)}">
                     <a  th:href="@{~/(start=${i},limit=${pageSize})}" th:style="${pageNumber!=i}?'color: gray;font-size: 1rem;'"><span th:text="${i}"/></span></a>
