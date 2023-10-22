@@ -2,13 +2,16 @@ package io.mountblue.controller;
 
 import io.mountblue.entity.Post;
 import io.mountblue.repository.PostRepository;
+import io.mountblue.repository.TagRepository;
 import io.mountblue.service.PostService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
@@ -20,17 +23,22 @@ public class PostController {
     private PostService postService;
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private TagRepository tagRepository;
 
     @GetMapping
-    public String displayPosts(Model model, @RequestParam Map<String,String> queryString) {
-        int pageNumber = Integer.parseInt(queryString.getOrDefault("start", "1"));
-        int pageSize = Integer.parseInt(queryString.getOrDefault("limit", "6"));
-        Page<Post> posts = postService.displayPosts(queryString,pageNumber,pageSize);
-        System.out.println(posts.getTotalPages()+" "+posts.getTotalElements()+" "+posts.getNumberOfElements());
-        model.addAttribute("posts", posts);
-        model.addAttribute("pageNumber",pageNumber);
-        model.addAttribute("pageSize",pageSize);
-        model.addAttribute("pageCount",posts.getTotalPages());
+    public String displayPosts(Model model, HttpServletRequest request,
+                               @RequestParam(required = false) String[] author,
+                               @RequestParam(required = false) String[] tag,
+                               @RequestParam(required = false) Map<String,String> queryString
+                               ) {
+        String url=request.getQueryString()!=null?
+                "&"+request.getQueryString().replaceAll("limit.*?&","").replaceAll("start.*?&",""):
+                "";
+        model.addAttribute("posts", postService.displayPosts(queryString,author,tag));
+        model.addAttribute("tagList",tagRepository.findAll());
+        model.addAttribute("authorList",postService.getAuthorList());
+        model.addAttribute("url",url);
         return "listPosts";
     }
 

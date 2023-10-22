@@ -21,7 +21,7 @@ public class Tag {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToMany(mappedBy = "tags",cascade = {CascadeType.DETACH,CascadeType.REFRESH})
+    @ManyToMany(mappedBy = "tags")
     private List<Post> posts;
 
     public Long getId() {

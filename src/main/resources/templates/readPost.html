@@ -35,7 +35,7 @@
     <h2><span th:text="${post.title}"/></h2>
     <h4><span th:text="${post.author}+', '+${#temporals.format(post.publishedAt, 'dd/MMM/yyy HH:mm')}"/></h4>
     <p><span th:text="${post.content}"/></p>
-    <span th:each="tag:${post.tags}"><em><span th:text="${tag.name}"/></em></span>
+    <p>Tags: <em><span style="color:gray" th:each="tag : ${post.tags}" th:text="${tag.name} + ', '" ></span></em></p>
 </div>
 <a th:attr="href='/post/update/'+${post.id}">Update Post</a> &nbsp;&nbsp;
 <a th:attr="href='/post/delete/'+${post.id}">Delete Post</a>
