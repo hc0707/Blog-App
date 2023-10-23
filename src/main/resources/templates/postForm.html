@@ -23,50 +23,67 @@
 <h1 style="text-align: justify;">
     <a href="/" style="text-decoration:none;color:black">Blog Post App</a>
 </h1>
-    <h3><span th:text="${message}"/></h3>
-    <div class="container">
-        <form>
-            <input type="hidden" th:value="${post}!=null?${post.id}:null" name="id">
-            <div>
-                <label>Title</label>
-                <textarea type="text" placeholder="Title"
-                          th:text="${post}!=null?${post.title}:null" name="title"></textarea>
-            </div>
-            <br>
-            <div>
-                <label>Author</label>
-                <textarea placeholder="Author name"
-                          th:text="${post}!=null?${post.excerpt}:null"
-                          name="author"></textarea>
-            </div>
-            <br>
-            <div th:if="${post}==null" class="mb-3">
-                <label>Tags</label>
-                <textarea  class="form-control postField" placeholder="Enter tags seperated by ',' "
-                          style="resize:none;" name="tagString"></textarea>
-            </div>
-            <br>
-            <div>
-                <label>Content</label>
-                <textarea placeholder="Write your content here"
-                          th:text="${post}!=null?${post.content}:null" style="height: 250px;resize: vertical;" name="content"></textarea>
-            </div>
-            <br>
-            <div>
-                <button type="submit" formaction="/post/publish"
-                        formmethod="post">Publish
-                </button>
-                &nbsp &nbsp &nbsp
-                <button type="submit" formaction="/post/draft"
-                        formmethod="post">Save as Draft
-                </button>
-            </div>
-            <!-- <div class="container" th:if="${post != null}">
-                <button class="btn btn-warning" type="submit" formaction="/updateblog" formmethod="post">Save</button>
-            </div> -->
+<h3><span th:text="${message}"/></h3>
+<div class="container">
+    <form>
+        <input type="hidden" th:value="${post}!=null?${post.id}:null" name="id">
+        <div>
+            <label>Title</label>
+            <textarea type="text" placeholder="Title"
+                      th:text="${post}!=null?${post.title}:null" name="title"></textarea>
+        </div>
+        <br>
+        <div th:if="${post}">
+            <label>Author</label>
+            <textarea placeholder="Author name"
+                      th:text="${post.author}"
+                      th:value="${post.author}"
+                      name="author" readonly>
+            </textarea>
+        </div>
+        <div th:if="${session.user.role}=='USER' AND !${post}">
+            <label>Author</label>
+            <textarea placeholder="Author name"
+                      th:text="${session.user.name}"
+                      th:value="${session.user.name}"
+                      name="author" readonly>
+            </textarea>
+        </div>
+        <div th:if="${session.user.role}=='ADMIN' AND !${post}">
+            <label>Author</label>
+            <select name="author" >
+                <option th:each="author:${authorList}" th:value="${author}" th:text="${author}"/>
+            </select>
+        </div>
+        <br>
+        <div th:if="${post}==null" class="mb-3">
+            <label>Tags</label>
+            <textarea class="form-control postField" placeholder="Enter tags seperated by ',' "
+                      style="resize:none;" name="tagString"></textarea>
+        </div>
+        <br>
+        <div>
+            <label>Content</label>
+            <textarea placeholder="Write your content here"
+                      th:text="${post}!=null?${post.content}:null" style="height: 250px;resize: vertical;"
+                      name="content"></textarea>
+        </div>
+        <br>
+        <div>
+            <button type="submit" formaction="/post/publish"
+                    formmethod="post">Publish
+            </button>
+            &nbsp &nbsp &nbsp
+            <button type="submit" formaction="/post/draft"
+                    formmethod="post">Save as Draft
+            </button>
+        </div>
+        <!-- <div class="container" th:if="${post != null}">
+            <button class="btn btn-warning" type="submit" formaction="/updateblog" formmethod="post">Save</button>
+        </div> -->
 
-        </form>
-    </div>
+    </form>
+</div>
 </body>
 
 </html>

@@ -43,6 +43,18 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> tags;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Long getId() {
         return id;
     }
@@ -145,6 +157,7 @@ public class Post {
                 ", updatedAt=" + updatedAt +
                 ", comments=" + comments +
                 ", tags=" + tags +
+                ", user=" + user +
                 '}';
     }
 }

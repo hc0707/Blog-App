@@ -58,50 +58,13 @@
 <div th:if="!${session.user}" style="display:flex;justify-content:start;">
     <button ><a href="/login">Login</a></button>
 </div>
-<div style="display:flex;justify-content:end;">
-<form style="margin-right:20px; margin-top:20px" method="get" action="/">
-    <label for="search">Search:</label>
-    <input type="text" id="search" name="search" placeholder="Enter search term" style="width:300px">
-    <label>Sort By:</label>
-    <select name="sortField">
-        <option value="none" selected disabled hidden>Sort By:</option>
-        <option value="publishedAt">Published Date</option>
-        <option value="author">Author</option>
-        <option value="title">Title</option>
-    </select>
-    <label >Order By:</label>
-    <select name="order">
-        <option value="none" selected disabled hidden>Order By:</option>
-        <option value="asc">Ascending</option>
-        <option value="desc">Descending</option>
-    </select>
-    <label>Author Filter</label>
-    <select name="author" multiple>
-        <option value="none" selected disabled hidden>Author:</option>
-        <option th:each="author:${authorList}" th:value="${author}" th:text="${author}"/>
-    </select>
-    <label>Tag Filter</label>
-    <select name="tag" multiple>
-        <option value="none" selected disabled hidden>Tag:</option>
-        <option th:each="tag:${tagList}" th:value="${tag.name}" th:text="${tag.name}"/>
-    </select>
-    <label>Page Size</label>
-    <select name="limit">
-        <option value="none" selected disabled hidden>Page Size: </option>
-        <option value="2">2</option>
-        <option value="4">4</option>
-        <option value="6">6</option>
-        <option value="8">8</option>
-        <option value="10">10</option>
-    </select>
-    <button type="submit">Search</button>
-</form>
-</div>
+
 <div class="flex-container">
     <tr th:each="post: ${posts}">
         <div class="card">
             <a th:attr="href='/post/read/'+${post.id}"><span class="link"></span></a>
             <h2><span th:text="${post.title}"/></h2>
+            <h3 th:if="!${post.published}">Draft</h3>
             <h4><span th:text="${post.author}+', '+${#temporals.format(post.publishedAt, 'dd/MMM/yyy HH:mm')}"/></h4>
             <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis perferendis labore expedita pariatur
                 voluptate, cumque unde quae facilis maiores similique, fuga quas dolore repellendus, necessitatibus
@@ -111,15 +74,6 @@
     </tr>
 </div>
 
-<nav th:if="${posts.totalPages} > 1" aria-label="Page navigation example" style="text-align: center;border:1px solid gray;padding:10px">
-            <a  th:href="@{~/(start=${posts.number},limit=${posts.size})}+${url}" th:style="${!posts.hasPrevious()}?'pointer-events: none;'">Previous</a>
-
-            <tr th:each="i :${#numbers.sequence( 1, posts.totalPages, 1)}">
-                    <a  th:href="@{~/(start=${i},limit=${posts.size})}+${url}" th:style="${posts.number+1!=i}?'color: gray;font-size: 1rem;'"><span th:text="${i}"/></span></a>
-            </tr>
-
-            <a th:href="@{~/(start=${posts.number}+2,limit=${posts.size})}+${url}" th:style="${!posts.hasNext()}?'pointer-events: none;'">Next</a>
-</nav>
 
 </body>
 </html>

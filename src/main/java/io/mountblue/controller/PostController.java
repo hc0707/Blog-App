@@ -7,6 +7,7 @@ import io.mountblue.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class PostController {
                                @RequestParam(required = false) Map<String,String> queryString
                                ) {
         String url=request.getQueryString()!=null?
-                "&"+request.getQueryString().replaceAll("limit.*?&","").replaceAll("start.*?&",""):
+                "&"+(request.getQueryString().replaceAll("limit.*?&","")).replaceAll("start.*?&",""):
                 "";
         model.addAttribute("posts", postService.displayPosts(queryString,author,tag));
         model.addAttribute("tagList",tagRepository.findAll());
@@ -43,12 +44,13 @@ public class PostController {
     }
 
     @GetMapping("/post")
-    public String createPost(){
+    public String createPost(Model model){
+        model.addAttribute("authorList",postService.getAuthorList());
         return "postForm";
     }
 
     @PostMapping("/post/publish")
-    public String publishPost(@ModelAttribute Post post, @RequestParam String tagString){
+    public String publishPost(@ModelAttribute Post post, @RequestParam(required = false) String tagString){
         post.setPublished(true);
         post.setPublishedAt(LocalDateTime.now());
         postService.savePost(post,tagString);
@@ -56,7 +58,7 @@ public class PostController {
     }
 
     @PostMapping("/post/draft")
-    public String draftPost(@ModelAttribute Post post,@RequestParam String tagString,Model model){
+    public String draftPost(@ModelAttribute Post post,@RequestParam(required = false) String tagString,Model model){
         post.setPublished(false);
         Post savedPost = postService.savePost(post, tagString);
         model.addAttribute("post",savedPost);
