@@ -43,11 +43,11 @@ public class PostService {
 
 
     public Post savePost(Post post, String tagString) {
-        System.out.println(post);
         if (post.getId() == null) {
             if (tagString != null && !tagString.isEmpty())
                 post.setTags(tagService.getPostTags(tagString));
             post.setCreatedAt(LocalDateTime.now());
+            post.setExcerpt(post.getContent().substring(0,100));
             post.setUser(userRepository.findByNameAndRole(post.getAuthor(), "USER"));
             return postRepository.save(post);
         } else {
@@ -58,6 +58,7 @@ public class PostService {
             updatePost.setPublished(post.getPublished());
             updatePost.setUpdatedAt(LocalDateTime.now());
             updatePost.setContent(post.getContent());
+            updatePost.setExcerpt(post.getContent().substring(0,100));
             updatePost.setTitle(post.getTitle());
             return postRepository.save(updatePost);
         }
